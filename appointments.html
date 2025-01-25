@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medico - appointment</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            direction: rtl;
+        }
+
+        .doctor-schedule-container {
+            background-color: #ddc0e4;
+            color: rgb(96, 15, 154);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            margin: 30px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .doctor-schedule-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .appointment-buttons {
+            display: flex;
+            overflow-x: auto;
+            background-color: #9c25b91d;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #691c99;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .appointment-buttons button {
+            flex-shrink: 0;
+            margin-right: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            background-color: #9d4ead;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .appointment-buttons button:hover {
+            background-color: #8e24aa;
+        }
+
+        .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .time-slot {
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .time-slot.booked {
+            background-color: #4caf50;
+        }
+
+        .time-slot.available {
+            background-color: #9e9e9e;
+        }
+
+        .time-slot:hover {
+            filter: brightness(0.9);
+        }
+
+        .time-slot p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar">
+                <li><a href="doctor_main.html">صفحه اصلی</a></li>
+                <li><a href="doctor_profile.html">پروفایل</a></li>
+                <li><a href="about.html">درباره ما</a></li>
+                <li><a href="contact.html">تماس با ما</a></li>
+            </ul>
+        </nav>
+        <div class="logo-container">
+            <img src="logo.png" alt="Medico Logo">
+        </div>
+    </header>
+    <div class="doctor-schedule-container">
+        <h2>نوبت‌های ثبت‌ شده</h2>
+        <div class="appointment-buttons" id="appointment-buttons"></div>
+        <div class="time-slots" id="time-slots"></div>
+    </div>
+
+    <script>
+        const scheduleData = [
+            {
+                day: "شنبه",
+                date: "۹ دی",
+                slots: [
+                    { time: "۱۵:۰۰", patient: "علی رضایی", nationalId: "1234567890" },
+                    { time: "۱۵:۳۰", patient: null, nationalId: null },
+                    { time: "۱۶:۰۰", patient: "زهرا مرادی", nationalId: "0987654321" },
+                    { time: "۱۶:۳۰", patient: null, nationalId: null },
+                    { time: "۱۷:۰۰", patient: null, nationalId: null }
+                ]
+            },
+            {
+                day: "یک‌شنبه",
+                date: "۱۰ دی",
+                slots: [
+                    { time: "۱۰:۰۰", patient: null, nationalId: null },
+                    { time: "۱۰:۳۰", patient: "محمد احمدی", nationalId: "5678901234" },
+                    { time: "۱۱:۰۰", patient: null, nationalId: null },
+                    { time: "۱۱:۳۰", patient: null, nationalId: null },
+                    { time: "۱۲:۰۰", patient: null, nationalId: null }
+                ]
+            }
+        ];
+
+        const appointmentButtons = document.getElementById('appointment-buttons');
+        const timeSlots = document.getElementById('time-slots');
+
+        function renderDays() {
+            scheduleData.forEach((day, index) => {
+                const button = document.createElement('button');
+                button.textContent = `${day.day} ${day.date}`;
+                button.addEventListener('click', () => renderSlots(index));
+                appointmentButtons.appendChild(button);
+            });
+        }
+
+        function renderSlots(dayIndex) {
+            const selectedDay = scheduleData[dayIndex];
+            timeSlots.innerHTML = '';
+            selectedDay.slots.forEach((slot) => {
+                const slotDiv = document.createElement('div');
+                slotDiv.className = `time-slot ${slot.patient ? 'booked' : 'available'}`;
+                slotDiv.innerHTML = `<p>${slot.time}</p>`;
+                slotDiv.addEventListener('click', () => {
+                    if (slot.patient) {
+                        alert(`نوبت گرفته شده توسط ${slot.patient} با کد ملی ${slot.nationalId}`);
+                    } else {
+                        alert('در این ساعت کسی نوبت نگرفته است.');
+                    }
+                });
+                timeSlots.appendChild(slotDiv);
+            });
+        }
+
+        renderDays();
+        renderSlots(0);
+    </script>
+</body>
+</html>

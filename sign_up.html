@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medico - Sign up</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .register-container {
+            background-color: #9c25b91d;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .register-container h2 {
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .register-container label {
+            display: block;
+            margin: 10px 0 5px;
+            text-align: right;
+            font-size: 1.2em;
+            color: var(--label-color);
+        }
+
+        .register-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--form-border);
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .register-container button {
+            background-color: var(--button-bg);
+            color: var(--primary-color);
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .register-container button:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        .login-link {
+            display: block;
+            margin-top: 15px;
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+
+        .role-select {
+            margin-bottom: 20px;
+        }
+
+        .role-select label {
+            font-size: 1.2em;
+        }
+
+        .role-select select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid var(--form-border);
+            border-radius: 5px;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .dynamic-fields {
+            display: none;
+        }
+
+        .dynamic-fields.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="Medico Logo">
+        </div>
+        <nav>
+            <ul class="navbar">
+                <li><a href="about.html">درباره ما</a></li>
+                <li><a href="contact.html">تماس با ما</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="register-container">
+            <h2>ثبت نام</h2>
+            <form action="register_process.html" method="post">
+                <div class="role-select">
+                    <label for="role">نقش خود را انتخاب کنید</label>
+                    <select id="role" name="role" onchange="updateFormFields()">
+                        <option value="patient">بیمار</option>
+                        <option value="doctor">دکتر</option>
+                        <option value="hospital">بیمارستان</option>
+                        <option value="lab">آزمایشگاه</option>
+                    </select>
+                </div>
+
+
+                <div id="patientFields" class="dynamic-fields active">
+                    <label for="firstName">نام</label>
+                    <input type="text" id="firstName" name="firstName" required style="direction: rtl">
+
+                    <label for="lastName">نام خانوادگی</label>
+                    <input type="text" id="lastName" name="lastName" required style="direction: rtl">
+
+                    <label for="nationalId">کد ملی</label>
+                    <input type="text" id="nationalId" name="nationalId" required>
+                    <script>
+                        document.getElementById("nationalId").addEventListener("input", function (e) {
+                            this.value = this.value.replace(/[^0-9]/g, '')
+                        });
+                    </script>
+
+                    <label for="email">ایمیل</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="password">رمز عبور</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <label for="confirmPassword">تکرار رمز عبور</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+                <div id="doctorFields" class="dynamic-fields">
+                    <label for="firstName">نام</label>
+                    <input type="text" id="firstName" name="firstName" required style="direction: rtl">
+
+                    <label for="lastName">نام خانوادگی</label>
+                    <input type="text" id="lastName" name="lastName" required style="direction: rtl">
+
+                    <label for="speciality">تخصص</label>
+                    <input type="text" id="speciality" name="speciality" required style="direction: rtl">
+
+                    <label for="medicalId">کد نظام پزشکی</label>
+                    <input type="text" id="medicalId" name="medicalId" required>
+                    <script>
+                        document.getElementById("medicalId").addEventListener("input", function (e) {
+                            this.value = this.value.replace(/[^0-9]/g, '')
+                        });
+                    </script>
+
+                    <label for="email">ایمیل</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="password">رمز عبور</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <label for="confirmPassword">تکرار رمز عبور</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+
+                <div id="hospitalFields" class="dynamic-fields">
+                    <label for="hospitalName">نام بیمارستان</label>
+                    <input type="text" id="hospitalName" name="hospitalName" required style="direction: rtl">
+
+                    <label for="nationalIdHos">شناسه ملی</label>
+                    <input type="text" id="nationalIdHos" name="nationalIdHos" required>
+                    <script>
+                        document.getElementById("nationalIdHos").addEventListener("input", function (e) {
+                            this.value = this.value.replace(/[^0-9]/g, '')
+                        });
+                    </script>
+
+                    <label for="email">ایمیل</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="password">رمز عبور</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <label for="confirmPassword">تکرار رمز عبور</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+                <div id="labFields" class="dynamic-fields">
+                    <label for="labName">نام آزمایشگاه</label>
+                    <input type="text" id="labName" name="labName" required style="direction: rtl">
+
+                    <label for="nationalIdLab">شناسه ملی</label>
+                    <input type="text" id="nationalIdLab" name="nationalIdLab" required>
+                    <script>
+                        document.getElementById("nationalIdLab").addEventListener("input", function (e) {
+                            this.value = this.value.replace(/[^0-9]/g, '')
+                        });
+                    </script>
+
+                    <label for="email">ایمیل</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="password">رمز عبور</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <label for="confirmPassword">تکرار رمز عبور</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+                <button type="submit">ثبت نام</button>
+            </form>
+            <a href="login.html" class="login-link">ورود به حساب</a>
+        </div>
+    </main>
+
+    <script>
+        function updateFormFields() {
+            var role = document.getElementById('role').value;
+            var patientFields = document.getElementById('patientFields');
+            var doctorFields = document.getElementById('doctorFields');
+            var hospitalFields = document.getElementById('hospitalFields');
+            var labFields = document.getElementById('labFields');
+
+            patientFields.classList.remove('active');
+            doctorFields.classList.remove('active');
+            hospitalFields.classList.remove('active');
+            labFields.classList.remove('active');
+
+            if (role === 'patient') {
+                patientFields.classList.add('active');
+            } else if (role === 'doctor') {
+                doctorFields.classList.add('active');
+            } else if (role === 'hospital') {
+                hospitalFields.classList.add('active');
+            } else if (role === 'lab') {
+                labFields.classList.add('active');
+            }
+        }
+
+        window.onload = function() {
+            updateFormFields();
+        }
+    </script>
+</body>
+</html>

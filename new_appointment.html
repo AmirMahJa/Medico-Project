@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medico - appointment</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body{
+            direction: rtl;
+        }
+        .appointment-container {
+            background-color: #9c25b91d;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: center;
+            margin: 50px auto 0 auto;
+        }
+        
+        .appointment-container h2 {
+            margin-bottom: 20px;
+            color: #4a4a4a;
+        }
+        
+        .appointment-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .appointment-container button {
+            background-color: #6a1b9a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .appointment-container button:hover {
+            background-color: #8e24aa;
+        }
+        .doctor-list {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .doctor-card {
+            background-color: #e0b3f1;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .doctor-card h3 {
+            margin: 0;
+            color: #4a4a4a;
+        }
+
+        .doctor-card p {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .doctor-card button {
+            background-color: #a450c4;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .doctor-card button:hover {
+            background-color: #7d3a99;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #4a4a4a;
+            margin-top: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: #ddc0e4;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            width: 1000px;
+            max-width: 40%;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1001;
+        }
+        
+        .modal-content .button-container {
+            display: flex;
+            overflow-x: auto;
+            background-color: #9c25b91d;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #691c99;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        
+        .modal-content .button-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .modal-content .button-container::-webkit-scrollbar-thumb {
+            background-color: #6a1b9a;
+            border-radius: 5px;
+        }
+        
+        .modal-content .button-container button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #9d4ead;
+            color: rgb(255, 255, 255);
+            border: none;
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .modal-content .button-container button:hover {
+            background-color: #8e24aa;
+        }
+        
+        .modal-content .button-container button span {
+            font-size: 1em;
+            color: #28f336;
+        }
+        
+        .modal-content .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            font-size: 1.5em;
+            color: #4a4a4a;
+            cursor: pointer;
+        }
+        
+        .modal-content .close-btn:hover {
+            color: #6a1b9a;
+        }
+        
+        .no-results {
+            text-align: center;
+            color: #4a4a4a;
+            margin-top: 20px;
+        }
+        .time-links {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .time-links a {
+            text-decoration: none;
+            color: #6b07aa;
+            font-size: 1em;
+            background-color: #c4aae6;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .time-links a:hover {
+            background-color: #b67fe3;
+            color: #4a148c;
+        }
+        .time-links p {
+            color: #ff1744;
+            font-size: 1em;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .button-container p {
+            color: #4a4a4a;
+            font-size: 1.2em;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+    </style>    
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar">
+                <li><a href="patient_main.html">صفحه اصلی</a></li>
+                <li><a href="patient_profile.html">پروفایل</a></li>
+                <li><a href="my_appointments.html">نوبت‌ های من</a></li>
+                <li><a href="about.html">درباره ما</a></li>
+                <li><a href="contact.html">تماس با ما</a></li>
+            </ul>
+        </nav>
+        <div class="logo-container">
+            <img src="logo.png" alt="Medico Logo">
+        </div>
+    </header>
+    <main>
+        <div class="appointment-container">
+            <h2>نوبت پزشک</h2>
+            <form id="search-form">
+                <input type="text" id="search-input" placeholder="پزشک یا تخصص">
+                <button type="submit">جستجو</button>
+            </form>
+        </div>
+
+        <div id="doctor-list" class="doctor-list"></div>
+
+        <div id="no-results" class="no-results" style="display: none;">پزشکی با این مشخصات وجود ندارد.</div>
+
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <div class="button-container" id="appointment-buttons">
+                </div>
+                <div id="time-links" class="time-links"></div>
+                <button class="close-btn">&times;</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const form = document.getElementById('search-form');
+        const input = document.getElementById('search-input');
+        const doctorList = document.getElementById('doctor-list');
+        const noResults = document.getElementById('no-results');
+        const modal = document.getElementById('modal');
+        const closeModalButton = document.querySelector('.close-btn');
+        const buttonContainer = document.getElementById('appointment-buttons');
+        const timeLinks = document.getElementById('time-links');
+
+        const doctors = [
+            { name: "دکتر علی احمدی", specialty: "متخصص قلب و عروق" },
+            { name: "دکتر زهرا مرادی", specialty: "متخصص کودکان" },
+        ];
+
+        const doctorAppointments = {
+            "دکتر علی احمدی": [
+                {
+                    day: "شنبه",
+                    date: "۹ دی",
+                    slots: 5,
+                    times: ["۱۵:۰۰", "۱۵:۳۰", "۱۶:۰۰", "۱۶:۳۰", "۱۷:۰۰", "۱۵:۳۰", "۱۶:۰۰", "۱۶:۳۰", "۱۷:۰۰", "۱۵:۳۰", "۱۶:۰۰", "۱۶:۳۰", "۱۷:۰۰", "۱۵:۳۰", "۱۶:۰۰", "۱۶:۳۰", "۱۷:۰۰"],
+                },                {
+                    day: "شنبه",
+                    date: "۹ دی",
+                    slots: 5,
+                    times: ["۱۵:۰۰", "۱۵:۳۰", "۱۶:۰۰", "۱۶:۳۰", "۱۷:۰۰"],
+                }, {
+                    day: "شنبه",
+                    date: "۹ دی",
+                    slots: 5,
+                    times: ["۱۵:۰۰", "۱۵:۳۰", "۱۶:۰۰", "۱۶:۳۰", "۱۷:۰۰"],
+                }, {
+                    day: "شنبه",
+                    date: "۹ دی",
+                    slots: 5,
+                    times: ["۱۵:۰۰", "۱۵:۳۰", "۱۶:۰۰", "۱۶:۳۰", "۱۷:۰۰"],
+                }, {
+                    day: "شنبه",
+                    date: "۹ دی",
+                    slots: 5,
+                    times: ["۱۵:۰۰", "۱۵:۳۰", "۱۶:۰۰", "۱۶:۳۰", "۱۷:۰۰"],
+                }, {
+                    day: "شنبه",
+                    date: "۹ دی",
+                    slots: 5,
+                    times: ["۱۵:۰۰", "۱۵:۳۰", "۱۶:۰۰", "۱۶:۳۰", "۱۷:۰۰"],
+                }, {
+                    day: "شنبه",
+                    date: "۹ دی",
+                    slots: 0,
+                    times: [],
+                }, {
+                    day: "شنبه",
+                    date: "۹ دی",
+                    slots: 5,
+                    times: ["۱۵:۰۰", "۱۵:۳۰", "۱۶:۰۰", "۱۶:۳۰", "۱۷:۰۰"],
+                }, {
+                    day: "شنبه",
+                    date: "۹ دی",
+                    slots: 5,
+                    times: ["۱۵:۰۰", "۱۵:۳۰", "۱۶:۰۰", "۱۶:۳۰", "۱۷:۰۰"],
+                }, {
+                    day: "شنبه",
+                    date: "۹ دی",
+                    slots: 5,
+                    times: ["۱۵:۰۰", "۱۵:۳۰", "۱۶:۰۰", "۱۶:۳۰", "۱۷:۰۰"],
+                }, {
+                    day: "شنبه",
+                    date: "۹ دی",
+                    slots: 5,
+                    times: ["۱۵:۰۰", "۱۵:۳۰", "۱۶:۰۰", "۱۶:۳۰", "۱۷:۰۰"],
+                }, 
+            ],
+            "دکتر زهرا مرادی": [
+                {
+                    day: "سه‌شنبه",
+                    date: "۱۲ دی",
+                    slots: 7,
+                    times: ["۱۰:۰۰", "۱۰:۳۰", "۱۱:۰۰", "۱۱:۳۰", "۱۲:۰۰", "۱۲:۳۰", "۱۳:۰۰"],
+                },
+                {
+                    day: "چهارشنبه",
+                    date: "۱۳ دی",
+                    slots: 4,
+                    times: ["۱۱:۰۰", "۱۱:۳۰", "۱۲:۰۰", "۱۲:۳۰"],
+                },
+            ],
+        };
+
+        function renderDoctors() {
+            doctorList.innerHTML = '';
+            doctors.forEach((doctor) => {
+                const card = document.createElement('div');
+                card.className = 'doctor-card';
+                card.innerHTML = `
+                    <h3>${doctor.name}</h3>
+                    <p>${doctor.specialty}</p>
+                    <button>انتخاب</button>
+                `;
+
+                card.querySelector('button').addEventListener('click', () => {
+                    renderAppointments(doctor.name);
+                    modal.style.display = 'flex';
+                });
+
+                doctorList.appendChild(card);
+            });
+        }
+
+        function renderAppointments(doctorName) {
+            buttonContainer.innerHTML = '';
+            timeLinks.innerHTML = '';
+            const appointments = doctorAppointments[doctorName] || [];
+
+            if (appointments.length === 0) {
+                buttonContainer.innerHTML = '<p>پزشک در این تاریخ نوبت خالی ندارد.</p>';
+                return;
+            }
+
+            appointments.forEach((appointment) => {
+                const button = document.createElement('button');
+                button.innerHTML = `
+                    <div>${appointment.date}</div>
+                    <div>${appointment.day}</div>
+                    <span>${appointment.times.length} نوبت</span>
+                `;
+
+                button.addEventListener('click', () => {
+                    renderTimes(doctorName, appointment.date, appointment.day, appointment.times);
+                });
+
+                buttonContainer.appendChild(button);
+            });
+        }
+
+        function renderTimes(doctorName, date, day, times) {
+            timeLinks.innerHTML = '';
+
+            if (times.length === 0) {
+                timeLinks.innerHTML = '<p>پزشک در این روز نوبت خالی ندارد.</p>';
+                return;
+            }
+
+            times.forEach((time) => {
+                const link = document.createElement('a');
+                link.textContent = time;
+                link.href = '#';
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const confirmSelection = confirm(`آیا می‌خواهید نوبت ${doctorName} در روز ${day} ${date}، ساعت ${time} را بگیرید؟`);
+                    if (confirmSelection) {
+                        alert('نوبت با موفقیت ثبت شد!');
+                        modal.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                    }
+                });
+                timeLinks.appendChild(link);
+            });
+        }
+
+
+        closeModalButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            }
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const query = input.value.trim();
+            if (!query) {
+                renderDoctors();
+                noResults.style.display = 'none';
+                return;
+            }
+
+            doctorList.innerHTML = '';
+            const filteredDoctors = doctors.filter(
+                (doc) => doc.name.includes(query) || doc.specialty.includes(query)
+            );
+
+            if (filteredDoctors.length) {
+                filteredDoctors.forEach((doctor) => {
+                    const card = document.createElement('div');
+                    card.className = 'doctor-card';
+                    card.innerHTML = `
+                        <h3>${doctor.name}</h3>
+                        <p>${doctor.specialty}</p>
+                        <button>انتخاب</button>
+                    `;
+
+                    card.querySelector('button').addEventListener('click', () => {
+                        renderAppointments(doctor.name);
+                        modal.style.display = 'flex';
+                    });
+
+                    doctorList.appendChild(card);
+                });
+                noResults.style.display = 'none';
+            } else {
+                noResults.style.display = 'block';
+            }
+        });
+
+renderDoctors();
+    </script>
+</body>
+</html>

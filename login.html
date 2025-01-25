@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medico - Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .login-container {
+            background-color: #9c25b91d;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .login-container label {
+            display: block;
+            margin: 10px 0 5px;
+            text-align: right;
+            font-size: 1.2em;
+            color: var(--label-color);
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--form-border);
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .login-container button {
+            background-color: var(--button-bg);
+            color: var(--primary-color);
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-container button:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        .signup-link {
+            display: block;
+            margin-top: 15px;
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .signup-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="Medico Logo">
+        </div>
+        <nav>
+            <ul class="navbar">
+                <li><a href="about.html">درباره ما</a></li>
+                <li><a href="contact.html">تماس با ما</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="login-container">
+            <h2>ورود</h2>
+            <form action="login_process.html" method="post">
+                <label for="username">نام کاربری</label>
+                <input type="text" id="username" name="username" required placeholder="کدملی / شناسه ملی">
+                <script>
+                    document.getElementById("username").addEventListener("input", function (e) {
+                        this.value = this.value.replace(/[^0-9]/g, '')
+                    });
+                </script>
+                <label for="password">رمز عبور</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">ورود</button>
+            </form>
+            <a href="sign_up.html" class="signup-link">ثبت نام</a>
+        </div>
+    </main>
+</body>
+</html>

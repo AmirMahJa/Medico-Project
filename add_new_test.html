@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medico - test</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            direction: rtl;
+        }
+        .upload-container {
+            background-color: #ddc0e4;
+            color: rgb(65, 5, 76);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            margin: 30px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .upload-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .upload-button {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            background-color: #9d4ead;
+            color: white;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .upload-button:hover {
+            background-color: #8e24aa;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar">
+                <li><a href="lab_main.html">صفحه اصلی</a></li>
+                <li><a href="lab_profile.html">پروفایل</a></li>
+                <li><a href="tests.html">آزمایشات</a></li>
+                <li><a href="about.html">درباره ما</a></li>
+                <li><a href="contact.html">تماس با ما</a></li>
+            </ul>
+        </nav>
+        <div class="logo-container">
+            <img src="logo.png" alt="Medico Logo">
+        </div>
+    </header>
+    <div class="upload-container">
+        <h2>بارگزاری آزمایش</h2>
+        <form id="upload-form">
+            <div class="form-group">
+                <label for="patient-firstname">نام بیمار</label>
+                <input type="text" id="patient-firstname" name="firstname" required>
+            </div>
+            <div class="form-group">
+                <label for="patient-lastname">نام خانوادگی بیمار</label>
+                <input type="text" id="patient-lastname" name="lastname" required>
+            </div>
+            <div class="form-group">
+                <label for="patient-id">کد ملی بیمار</label>
+                <input type="text" id="patient-id" name="nationalid" style="direction: ltr" required>
+            </div>
+            <script>
+                document.getElementById("patient-id").addEventListener("input", function (e) {
+                    this.value = this.value.replace(/[^0-9]/g, '')
+                });
+            </script>
+            <div class="form-group">
+                <label for="file-upload">انتخاب فایل</label>
+                <input type="file" id="file-upload" name="file" accept="application/pdf,image/*" required>
+            </div>
+            <button type="submit" class="upload-button">آپلود</button>
+        </form>
+    </div>
+
+    <script>
+        const uploadForm = document.getElementById('upload-form');
+
+        uploadForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const firstname = document.getElementById('patient-firstname').value;
+            const lastname = document.getElementById('patient-lastname').value;
+            const nationalId = document.getElementById('patient-id').value;
+            const fileInput = document.getElementById('file-upload');
+
+            if (firstname && lastname && nationalId && fileInput.files.length > 0) {
+                alert('فایل با موفقیت آپلود شد.');
+                uploadForm.reset();
+            } else {
+                alert('لطفاً تمام فیلدها را پر کنید و یک فایل انتخاب کنید.');
+            }
+        });
+    </script>
+</body>
+</html>
